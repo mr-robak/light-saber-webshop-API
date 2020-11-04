@@ -1,0 +1,64 @@
+{
+  "sabers": [
+    {
+      "id": 1,
+      "name": "Sith Saber",
+      "available": 27,
+      "crystal": {
+        "name": "Kadril saber",
+        "color": "red",
+        "planet": 25
+      }
+    },
+    {
+      "id": 2,
+      "name": "Master Jedi Saber",
+      "available": 13,
+      "crystal": {
+        "name": "Obi Wan saber",
+        "color": "green",
+        "planet": 5
+      }
+    },
+    {
+      "id": 3,
+      "name": "The Chosen One",
+      "available": 13,
+      "crystal": {
+        "name": "Anakin saber",
+        "color": "blue",
+        "planet": 5
+      }
+    },
+    {
+      "id": 4,
+      "name": "Dark Lord Saber",
+      "available": 27,
+      "crystal": {
+        "name": "Dooku saber",
+        "color": "red",
+        "planet": 25
+      }
+    },
+    {
+      "id": 5,
+      "name": "Apprentice Saber",
+      "available": 13,
+      "crystal": {
+        "name": "Ashoka saber",
+        "color": "green",
+        "planet": 5
+      }
+    },
+    {
+      "id": 6,
+      "name": "Cold Saber",
+      "available": 13,
+      "crystal": {
+        "name": "Hoth saber",
+        "color": "blue",
+        "planet": 5
+      }
+    }
+  ]
+}

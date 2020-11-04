@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-// console.log("Hello World!");
 
 const app = express();
 app.use(cors());
@@ -12,9 +11,11 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 4000; // use $PORT if it is defined otherwise use 4000 defined
 
-const db = require("./db.json");
-const doctors = db.doctors;
-const patients = db.patients;
+const db = require("./data/sabers.json");
+// const doctors = db.doctors;
+// const patients = db.patients;
+
+console.log(db);
 
 app.listen(port, () => {
   console.log(`Listening at localhost:${port}`);

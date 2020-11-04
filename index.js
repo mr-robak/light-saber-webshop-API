@@ -11,45 +11,53 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 4000; // use $PORT if it is defined otherwise use 4000 defined
 
-const db = require("./data/sabers.json");
-// const doctors = db.doctors;
-// const patients = db.patients;
+const products = require("./data/sabers.json");
+const sabers = products.sabers;
+const orders = require("./data/orders.json");
 
-console.log(db);
+// console.log("orders", orders);
+// console.log("products", sabers);
 
 app.listen(port, () => {
   console.log(`Listening at localhost:${port}`);
 });
 
-app.post("/new_user", (request, response) => {
+app.post("/orders", (request, response) => {
   // console.log("Request at /new_user", request.body);
-  const newPatient = request.body;
-  console.log("POST recieved at /new_user", newPatient);
+  const newOrder = request.body;
+  console.log("POST recieved at /orders", newOrder);
   response.sendStatus(200);
 });
 
-app.get("/", (request, response) => {
-  response.send(landingPageHtml);
+// app.get("/", (request, response) => {
+//   response.send(landingPageHtml);
+// });
+
+app.get("/products", (request, response) => {
+  response.send(products);
 });
 
-app.get("/doctors", (request, response) => {
-  response.send(doctors);
+app.get("/products", (request, response) => {
+  response.send(products);
 });
 
-app.get("/patients", (request, response) => {
-  response.send(patients);
-});
+app.get("/products/:id", (request, response) => {
+  const productId = parseInt(request.params.id);
+  console.log("Product requested ID:", productId);
 
-app.get("/patients/:id", (request, response) => {
-  const urlId = request.params.id;
-  console.log("Patient data requested from url:", urlId);
+  console.log(sabers[0].id);
 
-  const getPatient = patients.find((patient) => {
-    // console.log("patient", patient.id, "-- ID", patient.id === urlId);
-    return patient.id === urlId;
+  const getProduct = sabers.find((saber) => {
+    // console.log(
+    //   "saber id",
+    //   saber.id,
+    //   "=== requested ID",
+    //   saber.id === productId
+    // );
+    return saber.id === productId;
   });
-  //   console.log(getPatient);
-  response.send(getPatient);
+  // console.log(getProduct);
+  response.send(getProduct);
 });
 
 const landingPageHtml = `
@@ -58,7 +66,7 @@ const landingPageHtml = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patients Server</title>
+    <title>Lightsabers Shop Server</title>
 </head>
 <body>
     <h1>Server Running on port: ${port}</h1>

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -9,19 +10,12 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 4000; // use $PORT if it is defined otherwise use 4000 defined
+const port = process.env.PORT;
 
-// const products = require("./data/sabers.json").sabers;
-// const sabers = products.sabers;
+const products = JSON.parse(fs.readFileSync("./data/sabers.json"));
+// console.log("!!!", products);
 
-const products = fs.readFile("./data/sabers.json", (err, data) => {
-  if (err) throw err;
-  let student = JSON.parse(data);
-  console.log(student);
-});
-
-const rawdata = fs.readFileSync("./data/orders.json");
-let orders = JSON.parse(rawdata);
+const orders = JSON.parse(fs.readFileSync("./data/orders.json"));
 
 // console.log("orders", orders);
 // console.log("products", sabers);
@@ -48,46 +42,53 @@ app.post("/orders", (request, response) => {
   response.sendStatus(200);
 });
 
+app.get("/products", (request, response) => {
+  console.log("requested products");
+  // console.log(products);
+  response.send(products);
+});
+
+app.post("/admin", (request, response) => {
+  // console.log("Request at /admin", request.body);
+
+  const { ADMIN, PASSWORD, NAME, AGE } = process.env;
+  // console.log(ADMIN, PASSWORD, NAME, AGE);
+  if (request.body.name === ADMIN && request.body.password === PASSWORD) {
+    response.send({ name: NAME, age: AGE });
+  } else {
+    response.sendStatus(401);
+  }
+});
+
+// app.get("/products/:id", (request, response) => {
+//   const productId = parseInt(request.params.id);
+//   console.log("Product requested ID:", productId);
+
+//   const getProduct = sabers.find((saber) => {
+//     // console.log(
+//     //   "saber id",
+//     //   saber.id,
+//     //   "=== requested ID",
+//     //   saber.id === productId
+//     // );
+//     return saber.id === productId;
+//   });
+//   // console.log(getProduct);
+//   response.send(getProduct);
+// });
+
 app.get("/", (request, response) => {
   response.send(landingPageHtml);
 });
-
-app.get("/products", (request, response) => {
-  response.send(products);
-});
-
-app.get("/products", (request, response) => {
-  response.send(products);
-});
-
-app.get("/products/:id", (request, response) => {
-  const productId = parseInt(request.params.id);
-  console.log("Product requested ID:", productId);
-
-  console.log(sabers[0].id);
-
-  const getProduct = sabers.find((saber) => {
-    // console.log(
-    //   "saber id",
-    //   saber.id,
-    //   "=== requested ID",
-    //   saber.id === productId
-    // );
-    return saber.id === productId;
-  });
-  // console.log(getProduct);
-  response.send(getProduct);
-});
-
 const landingPageHtml = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lightsabers Shop Server</title>
-</head>
-<body>
-    <h1>Server Running on port: ${port}</h1>
-</body>
-</html>`;
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Lightsabers Shop Server</title>
+      </head>
+      <body>
+      <h1>Server Running on port: ${port}</h1>
+      </body>
+      </html>`;

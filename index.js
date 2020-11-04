@@ -1,19 +1,27 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(cors());
 
-const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 4000; // use $PORT if it is defined otherwise use 4000 defined
 
-const products = require("./data/sabers.json");
-const sabers = products.sabers;
-const orders = require("./data/orders.json");
+// const products = require("./data/sabers.json").sabers;
+// const sabers = products.sabers;
+
+const products = fs.readFile("./data/sabers.json", (err, data) => {
+  if (err) throw err;
+  let student = JSON.parse(data);
+  console.log(student);
+});
+
+const rawdata = fs.readFileSync("./data/orders.json");
+let orders = JSON.parse(rawdata);
 
 // console.log("orders", orders);
 // console.log("products", sabers);
@@ -25,13 +33,24 @@ app.listen(port, () => {
 app.post("/orders", (request, response) => {
   // console.log("Request at /new_user", request.body);
   const newOrder = request.body;
-  console.log("POST recieved at /orders", newOrder);
+  // console.log("POST received at /orders", newOrder);
+  orders.orders.push(newOrder);
+  // console.log("orders before fs.write", orders);
+
+  const data = JSON.stringify(orders);
+  // console.log(data);
+
+  fs.writeFile("./data/orders.json", data, (err) => {
+    if (err) throw err;
+    // console.log("Data written to file");
+    // console.log("orders AFTER fs.write", orders);
+  });
   response.sendStatus(200);
 });
 
-// app.get("/", (request, response) => {
-//   response.send(landingPageHtml);
-// });
+app.get("/", (request, response) => {
+  response.send(landingPageHtml);
+});
 
 app.get("/products", (request, response) => {
   response.send(products);

@@ -7,7 +7,7 @@
       "crystal": {
         "name": "Kadril saber",
         "color": "red",
-        "planet": 25
+        "planet": 13
       }
     },
     {
@@ -27,7 +27,7 @@
       "crystal": {
         "name": "Anakin saber",
         "color": "blue",
-        "planet": 5
+        "planet": 25
       }
     },
     {
@@ -37,7 +37,7 @@
       "crystal": {
         "name": "Dooku saber",
         "color": "red",
-        "planet": 25
+        "planet": 13
       }
     },
     {
@@ -57,7 +57,7 @@
       "crystal": {
         "name": "Hoth saber",
         "color": "blue",
-        "planet": 5
+        "planet": 25
       }
     }
   ]

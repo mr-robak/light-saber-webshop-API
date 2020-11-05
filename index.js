@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 const port = process.env.PORT;
 
 const products = JSON.parse(fs.readFileSync("./data/sabers.json"));
-// console.log("!!!", products);
+console.log("!!!", products);
 
 const orders = JSON.parse(fs.readFileSync("./data/orders.json"));
 
-// console.log("orders", orders);
+// console.log("orders!!!", orders);
 // console.log("products", sabers);
 
 app.listen(port, () => {
@@ -43,9 +43,40 @@ app.post("/orders", (request, response) => {
 });
 
 app.get("/products", (request, response) => {
-  console.log("requested products");
+  // console.log("requested products");
   // console.log(products);
   response.send(products);
+});
+
+app.put("/products", (request, response) => {
+  console.log("requested products");
+  console.log(22222222222, "request", request.body);
+  const newSaber = request.body;
+  const newStock = {
+    sabers: [
+      ...products.sabers,
+      {
+        ...newSaber,
+        id: parseInt(newSaber.id),
+        available: parseInt(newSaber.available),
+        crystal: {
+          ...newSaber.crystal,
+          planet: parseInt(newSaber.crystal.planet),
+        },
+      },
+    ],
+  };
+  console.log(1111111, "newStock", newStock);
+
+  const data = JSON.stringify(newStock);
+  console.log(data);
+
+  fs.writeFile("./data/sabers.json", data, (err) => {
+    if (err) throw err;
+    console.log("Data written to file");
+    console.log("products AFTER fs.write", products);
+  });
+  response.send(newStock);
 });
 
 app.post("/admin", (request, response) => {
@@ -54,7 +85,7 @@ app.post("/admin", (request, response) => {
   const { ADMIN, PASSWORD, NAME, AGE } = process.env;
   // console.log(ADMIN, PASSWORD, NAME, AGE);
   if (request.body.name === ADMIN && request.body.password === PASSWORD) {
-    response.send({ name: NAME, age: AGE });
+    response.send({ user: { name: NAME, age: AGE }, orders, products });
   } else {
     response.sendStatus(401);
   }

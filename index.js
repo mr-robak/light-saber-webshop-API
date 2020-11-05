@@ -13,44 +13,30 @@ app.use(bodyParser.json());
 const port = process.env.PORT;
 
 const products = JSON.parse(fs.readFileSync("./data/sabers.json"));
-console.log("!!!", products);
 
 const orders = JSON.parse(fs.readFileSync("./data/orders.json"));
-
-// console.log("orders!!!", orders);
-// console.log("products", sabers);
 
 app.listen(port, () => {
   console.log(`Listening at localhost:${port}`);
 });
 
 app.post("/orders", (request, response) => {
-  // console.log("Request at /new_user", request.body);
   const newOrder = request.body;
-  // console.log("POST received at /orders", newOrder);
   orders.orders.push(newOrder);
-  // console.log("orders before fs.write", orders);
 
   const data = JSON.stringify(orders);
-  // console.log(data);
 
   fs.writeFile("./data/orders.json", data, (err) => {
     if (err) throw err;
-    // console.log("Data written to file");
-    // console.log("orders AFTER fs.write", orders);
   });
   response.sendStatus(200);
 });
 
 app.get("/products", (request, response) => {
-  // console.log("requested products");
-  // console.log(products);
   response.send(products);
 });
 
 app.put("/products", (request, response) => {
-  console.log("requested products");
-  console.log(22222222222, "request", request.body);
   const newSaber = request.body;
   const newStock = {
     sabers: [
@@ -66,24 +52,17 @@ app.put("/products", (request, response) => {
       },
     ],
   };
-  console.log(1111111, "newStock", newStock);
 
   const data = JSON.stringify(newStock);
-  console.log(data);
 
   fs.writeFile("./data/sabers.json", data, (err) => {
     if (err) throw err;
-    console.log("Data written to file");
-    console.log("products AFTER fs.write", products);
   });
   response.send(newStock);
 });
 
 app.post("/admin", (request, response) => {
-  // console.log("Request at /admin", request.body);
-
   const { ADMIN, PASSWORD, NAME, AGE } = process.env;
-  // console.log(ADMIN, PASSWORD, NAME, AGE);
   if (request.body.name === ADMIN && request.body.password === PASSWORD) {
     response.send({ user: { name: NAME, age: AGE }, orders, products });
   } else {
